@@ -97,7 +97,7 @@ The MCP server should now be available.
    - *"Show me all businesses"*
    - *"What business tools are available?"*
 
-![Claude Desktop MCP Server Running](screenshots/config-file-location-macos.png)
+![Claude Desktop MCP Server Running](screenshots/verify-if-mcpserver-installed-in-settings.png)
 *The MCP server running successfully in Claude Desktop's developer settings*
 
 You should see the business management tools working! 🎉
