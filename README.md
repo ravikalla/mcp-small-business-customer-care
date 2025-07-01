@@ -7,25 +7,20 @@
 
 A **Spring AI-powered MCP (Model Context Protocol) server** for managing small business customer care operations through AI assistants like Claude Desktop.
 
-## 🎯 Overview
+## 💬 See It In Action
 
-This MCP server enables AI assistants to interact directly with business data, providing intelligent customer relationship management capabilities. Built using Spring AI's MCP framework for reliable, production-ready AI integration.
+Here's what you can do with this MCP server through natural conversation with Claude Desktop:
 
-## ✨ Features
+| 👤 **User** | 🤖 **Claude (via MCP)** | 🔧 **What Happened** |
+|-------------|-------------------------|----------------------|
+| "Show me what businesses have timings" | Lists all 5 businesses and notes that timing info is stored in descriptions | Used `list_businesses` tool |
+| "Delete green thumb business" | ✅ "Deleted: Green Thumb Landscaping business" | Used `remove_business` with ID "3" |
+| "Create new business called Ravi Restaurant that opens at 9AM and closes at 5PM" | ✅ "Created: Ravi Restaurant<br/>• Category: Restaurant<br/>• Hours: 9:00 AM - 5:00 PM daily<br/>• Location: 789 Pine Rd, Springfield" | Used `create_business` with hours in description |
+| "Mike's auto repair shop opens at 1PM and closes at 9PM" | ✅ "Updated: Mike's Auto Repair<br/>• Hours: 1:00 PM - 9:00 PM daily<br/>• All other details preserved" | Used `update_business` to add hours |
+| "Show me the list of business names" | **Current businesses:**<br/>• Joe's Coffee Shop<br/>• Tech Repair Solutions<br/>• Bella's Boutique<br/>• Mike's Auto Repair (Hours: 1:00 PM - 9:00 PM)<br/>• Ravi Restaurant (Hours: 9:00 AM - 5:00 PM)<br/><br/>**Total: 5 businesses** | Used `list_businesses` and formatted response |
+| "Find all restaurants" | Shows Ravi Restaurant and Joe's Coffee Shop with full details | Used `search_businesses` with query "restaurant" |
 
-### **Complete Business Management**
-- 🏢 **Create businesses** with full contact details and ratings
-- 📋 **List all businesses** in your database
-- 🔍 **Search businesses** by name, category, or description
-- 👀 **Get detailed business information** by ID
-- ✏️ **Update business details** (partial updates supported)
-- 🗑️ **Remove businesses** from the system
-
-### **Smart Search & Analytics**
-- Full-text search across all business fields
-- Category-based filtering
-- Rating-based business evaluation
-- Business hours management (via descriptions)
+**🎯 The Power**: Natural language → Structured business operations → Real data management
 
 ## 🚀 Quick Start
 
@@ -52,17 +47,13 @@ ls -la target/small-business-customer-care-1.0.0.jar
 # Test initialization
 echo '{"jsonrpc":"2.0","method":"initialize","params":{"protocolVersion":"2024-11-05"},"id":0}' | java -jar target/small-business-customer-care-1.0.0.jar
 
-# Test listing tools
-echo '{"jsonrpc":"2.0","method":"tools/list","params":{},"id":1}' | java -jar target/small-business-customer-care-1.0.0.jar
-
 # Test business listing
 echo '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"list_businesses","arguments":{}},"id":2}' | java -jar target/small-business-customer-care-1.0.0.jar
 ```
 
 ## 🔧 Claude Desktop Integration
 
-### **Configuration**
-Add this configuration to your Claude Desktop config file at:
+Add this configuration to your Claude Desktop config file:
 - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
 
@@ -83,53 +74,24 @@ Add this configuration to your Claude Desktop config file at:
 
 **Important**: Replace `/path/to/your/` with the actual absolute path to your project directory.
 
-### **Restart Claude Desktop**
-After updating the configuration:
-1. Completely close Claude Desktop
-2. Reopen Claude Desktop
-3. The MCP server will automatically connect
+**Restart Claude Desktop** completely after updating the configuration.
 
 ## 🛠️ Available Business Tools
 
-### **1. List All Businesses**
-```json
-{
-  "method": "tools/call",
-  "params": {
-    "name": "list_businesses",
-    "arguments": {}
-  }
-}
-```
+The server provides 6 MCP tools for complete business management:
 
-### **2. Search Businesses**
-```json
-{
-  "method": "tools/call",
-  "params": {
-    "name": "search_businesses",
-    "arguments": {
-      "query": "restaurant"
-    }
-  }
-}
-```
+| Tool | Purpose | Example Usage |
+|------|---------|---------------|
+| `list_businesses` | Get all businesses | "Show me all businesses" |
+| `search_businesses` | Find by name/category/description | "Find restaurants" |
+| `get_business` | Get details by ID | "Show details for business 1" |
+| `create_business` | Add new business | "Create Ravi Restaurant..." |
+| `update_business` | Modify existing business | "Update business hours for..." |
+| `remove_business` | Delete business | "Delete green thumb business" |
 
-### **3. Get Business Details**
+### **JSON API Examples**
 ```json
-{
-  "method": "tools/call",
-  "params": {
-    "name": "get_business",
-    "arguments": {
-      "id": "1"
-    }
-  }
-}
-```
-
-### **4. Create New Business**
-```json
+// Create new business
 {
   "method": "tools/call",
   "params": {
@@ -140,194 +102,77 @@ After updating the configuration:
       "address": "789 Pine Rd, Springfield",
       "phone": "555-0106",
       "email": "info@ravirestaurant.com",
-      "description": "Family-friendly restaurant serving fresh cuisine. Hours: 9:00 AM - 5:00 PM daily",
+      "description": "Family-friendly restaurant. Hours: 9:00 AM - 5:00 PM daily",
       "rating": 4.5
     }
   }
 }
-```
 
-### **5. Update Business**
-```json
+// Search businesses
 {
   "method": "tools/call",
   "params": {
-    "name": "update_business",
-    "arguments": {
-      "id": "5",
-      "description": "Full-service automotive repair and maintenance. Hours: 1:00 PM - 9:00 PM daily"
-    }
+    "name": "search_businesses",
+    "arguments": { "query": "restaurant" }
   }
 }
 ```
-
-### **6. Remove Business**
-```json
-{
-  "method": "tools/call",
-  "params": {
-    "name": "remove_business",
-    "arguments": {
-      "id": "3"
-    }
-  }
-}
-```
-
-## 🎭 Real-World Usage Examples
-
-Based on actual Claude Desktop conversations, here are examples of what you can do:
-
-### **Example 1: Business Hours Management**
-**User**: "Show me what businesses have timings"
-
-**Claude Response**: Lists all businesses and notes that timing information is stored in descriptions.
-
-**User**: "Delete green thumb business. Create new business called Ravi Restaurant that opens at 9AM and closes at 5PM. Also, Mike's auto repair shop opens at 1PM and closes at 9PM."
-
-**Claude Actions**:
-1. ✅ Deletes Green Thumb Landscaping
-2. ✅ Creates Ravi Restaurant with 9AM-5PM hours in description
-3. ✅ Updates Mike's Auto Repair with 1PM-9PM hours in description
-
-### **Example 2: Business Listing**
-**User**: "Show me the list of business names"
-
-**Claude Response**:
-- Joe's Coffee Shop
-- Tech Repair Solutions  
-- Bella's Boutique
-- Mike's Auto Repair (Hours: 1:00 PM - 9:00 PM)
-- Ravi Restaurant (Hours: 9:00 AM - 5:00 PM)
-
-*Total: 5 businesses*
-
-### **Example 3: Smart Search**
-**User**: "Find all restaurants"
-
-**Claude**: Uses `search_businesses` with query "restaurant" to find restaurant-category businesses.
 
 ## 🏗️ Technical Architecture
 
-### **Spring AI MCP Framework**
+Built with **Spring AI MCP Framework**:
 - Uses `spring-ai-mcp-server-spring-boot-starter` for robust MCP protocol handling
 - Annotation-driven tool definitions with `@Tool`
-- Automatic tool discovery and registration via `ToolCallbacks.from()`
+- Automatic tool discovery via `ToolCallbacks.from()`
 - Clean STDIO transport with proper logging configuration
 
-### **Business Service Layer**
 ```java
 @Service
 public class BusinessService {
-    
     @Tool(name = "list_businesses", description = "Get a list of all businesses")
     public List<Business> listBusinesses() { ... }
     
     @Tool(name = "search_businesses", description = "Search businesses by name, category, or description")
     public List<Business> searchBusinesses(String query) { ... }
-    
     // ... other tool methods
 }
 ```
 
-### **Configuration**
-```properties
-spring.application.name=small-business-customer-care
-spring.main.web-application-type=none
-spring.ai.mcp.server.name=small-business-customer-care
-spring.ai.mcp.server.version=1.0.0
-
-# Required for STDIO transport
-spring.main.banner-mode=off
-logging.pattern.console=
-```
-
 ## 🧪 Development & Testing
 
-### **Running Tests**
 ```bash
 # Run all tests
 mvn test
 
-# Run specific test
-mvn test -Dtest=SmallBusinessCustomerCareApplicationTest
-```
-
-### **Local Development**
-```bash
-# Start in development mode
+# Start in development mode  
 mvn spring-boot:run
 
-# Or run the JAR directly
-java -jar target/small-business-customer-care-1.0.0.jar
-```
-
-### **Debugging**
-The server logs to stderr (visible in Claude Desktop logs), while MCP communication happens via stdout/stdin.
-
-## 📋 Default Business Data
-
-The server comes pre-loaded with sample businesses:
-
-1. **Joe's Coffee Shop** (Restaurant) - 4.5⭐
-2. **Tech Repair Solutions** (Technology) - 4.2⭐  
-3. **Green Thumb Landscaping** (Services) - 4.8⭐
-4. **Bella's Boutique** (Retail) - 4.3⭐
-5. **Mike's Auto Repair** (Automotive) - 4.6⭐
-
-## 🚀 Production Deployment
-
-### **Building for Production**
-```bash
+# Build for production
 mvn clean package -DskipTests
 ```
 
-### **Running in Production**
-```bash
-java -jar target/small-business-customer-care-1.0.0.jar
-```
-
-### **System Requirements**
-- Java 17+ Runtime
-- Minimum 512MB RAM
-- Disk space for JAR file (~20MB)
+**Sample Data**: The server comes pre-loaded with 5 businesses:
+Joe's Coffee Shop, Tech Repair Solutions, Green Thumb Landscaping, Bella's Boutique, Mike's Auto Repair
 
 ## 🔧 Troubleshooting
 
-### **Server Not Connecting**
-1. Verify Java 17+ is installed: `java -version`
-2. Check JAR file exists: `ls -la target/small-business-customer-care-1.0.0.jar`
-3. Test server manually with echo commands above
+**Server Not Connecting:**
+1. Verify Java 17+: `java -version`
+2. Check JAR exists: `ls -la target/small-business-customer-care-1.0.0.jar`
+3. Test manually with echo commands above
 4. Restart Claude Desktop completely
-5. Check Claude Desktop logs for errors
 
-### **Build Issues**
+**Build Issues:**
 ```bash
-# Clean rebuild
-mvn clean compile
-
-# Skip tests if failing
-mvn clean package -DskipTests
-
-# Verbose output
-mvn clean package -X
+mvn clean package -DskipTests  # Skip tests if failing
+mvn clean package -X          # Verbose output
 ```
 
-### **Path Issues**
+**Path Issues:**
 - Use absolute paths in Claude Desktop configuration
-- Escape spaces in paths with quotes: `"/path with spaces/"`
-- Verify file permissions (JAR should be readable)
+- Escape spaces with quotes: `"/path with spaces/"`
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Run `mvn test` to verify
-6. Submit a pull request
-
-## 📚 Additional Resources
+## 📚 Resources
 
 - [Model Context Protocol Specification](https://modelcontextprotocol.io/)
 - [Spring AI Documentation](https://spring.io/projects/spring-ai)
