@@ -56,14 +56,18 @@ public class McpServer {
              PrintWriter writer = new PrintWriter(System.out, true)) {
             
             String line;
-            // Keep reading until stdin is closed
-            while ((line = reader.readLine()) != null) {
+            // Keep reading until stdin is closed or interrupted
+            while ((line = reader.readLine()) != null && !Thread.currentThread().isInterrupted()) {
                 try {
                     if (!line.trim().isEmpty()) {
                         JsonNode request = objectMapper.readTree(line);
                         JsonNode response = handleRequest(request);
-                        writer.println(objectMapper.writeValueAsString(response));
-                        writer.flush();
+                        
+                        // Only send response if it's not null (ignore notifications)
+                        if (response != null) {
+                            writer.println(objectMapper.writeValueAsString(response));
+                            writer.flush();
+                        }
                     }
                 } catch (Exception e) {
                     ObjectNode errorResponse = objectMapper.createObjectNode();
@@ -86,6 +90,12 @@ public class McpServer {
         String method = request.has("method") ? request.get("method").asText() : "";
         JsonNode id = request.has("id") ? request.get("id") : null;
         
+        // Handle notifications (no response needed)
+        if (id == null && method.startsWith("notifications/")) {
+            // This is a notification, don't send a response
+            return null;
+        }
+        
         ObjectNode response = objectMapper.createObjectNode();
         response.put("jsonrpc", "2.0");
         if (id != null) {
@@ -98,6 +108,9 @@ public class McpServer {
                 case "initialize":
                     result = handleInitialize();
                     break;
+                case "initialized":
+                    // Handle initialized notification - no response needed
+                    return null;
                 case "tools/list":
                     result = handleToolsList();
                     break;
@@ -105,6 +118,10 @@ public class McpServer {
                     result = handleToolsCall(request);
                     break;
                 default:
+                    if (method.startsWith("notifications/")) {
+                        // Handle other notifications - no response needed
+                        return null;
+                    }
                     ObjectNode error = objectMapper.createObjectNode();
                     error.put("code", -32601);
                     error.put("message", "Method not found: " + method);
