@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<configuration>
-    <!-- Completely suppress all logging for clean MCP communication -->
-    <root level="OFF">
-        <!-- No appenders - complete silence -->
-    </root>
-</configuration>
