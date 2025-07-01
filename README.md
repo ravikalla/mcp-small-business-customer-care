@@ -1,282 +1,342 @@
-# 🏪 MCP Small Business Customer Care System
+# 🏪 Small Business Customer Care MCP Server
 
 [![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://openjdk.java.net/projects/jdk/17/)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.0-green.svg)](https://spring.io/projects/spring-boot)
-[![Maven](https://img.shields.io/badge/Maven-3.8+-blue.svg)](https://maven.apache.org/)
-[![Tests](https://img.shields.io/badge/Tests-54%20Passing-brightgreen.svg)](#testing)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.4-green.svg)](https://spring.io/projects/spring-boot)
+[![Spring AI](https://img.shields.io/badge/Spring%20AI-1.0.0--M6-blue.svg)](https://spring.io/projects/spring-ai)
 [![MCP Protocol](https://img.shields.io/badge/MCP-2024--11--05-purple.svg)](https://modelcontextprotocol.io/)
 
-A **Model Context Protocol (MCP) server** component for intelligent small business customer relationship management. This MCP server will be integrated into the main [AI Small Business Customer Care](https://github.com/ravikalla/ai-small-business-customercare) platform to provide standardized AI assistant integration capabilities.
+A **Spring AI-powered MCP (Model Context Protocol) server** for managing small business customer care operations through AI assistants like Claude Desktop.
 
-## 🔗 Project Context
+## 🎯 Overview
 
-This repository contains the **MCP Protocol Component** that will be integrated into the comprehensive [AI Small Business Customer Care](https://github.com/ravikalla/ai-small-business-customercare) platform. The MCP server enables:
+This MCP server enables AI assistants to interact directly with business data, providing intelligent customer relationship management capabilities. Built using Spring AI's MCP framework for reliable, production-ready AI integration.
 
-- **AI Assistant Integration**: Direct LLM access to business data
-- **Standardized Protocol**: MCP compliance for universal AI tool compatibility  
-- **Microservices Architecture**: Modular component for the larger ecosystem
-- **Future Integration**: Planned inclusion in the main platform's next release
+## ✨ Features
 
-## 🎯 Purpose
+### **Complete Business Management**
+- 🏢 **Create businesses** with full contact details and ratings
+- 📋 **List all businesses** in your database
+- 🔍 **Search businesses** by name, category, or description
+- 👀 **Get detailed business information** by ID
+- ✏️ **Update business details** (partial updates supported)
+- 🗑️ **Remove businesses** from the system
 
-### **Business Challenge**
-Small businesses need intelligent customer management tools that can integrate seamlessly with AI assistants and automation platforms. Traditional solutions lack the flexibility for modern AI-driven workflows.
+### **Smart Search & Analytics**
+- Full-text search across all business fields
+- Category-based filtering
+- Rating-based business evaluation
+- Business hours management (via descriptions)
 
-### **MCP Solution**
-This server provides a standardized interface that enables:
-- AI assistants to directly query and manage business data
-- Automated customer relationship processing
-- Seamless integration with existing business workflows
-- Future-proof architecture for emerging AI technologies
-
-## 🏗️ Architecture
-
-### **System Design**
-Built using clean architecture principles with modular design for easy integration:
-
-```
-┌─────────────────────────────────────────┐
-│           MCP Protocol Layer            │  ← Standardized AI Interface
-├─────────────────────────────────────────┤
-│         Business Logic Layer            │  ← Customer Management Rules
-├─────────────────────────────────────────┤
-│          Data Access Layer              │  ← Business Entity Operations
-├─────────────────────────────────────────┤
-│         Infrastructure Layer            │  ← Spring Boot Foundation
-└─────────────────────────────────────────┘
-```
-
-### **Technology Stack**
-- **Backend**: Spring Boot 3.2.0 with dependency injection
-- **Protocol**: Model Context Protocol (MCP) 2024-11-05 specification
-- **Data Processing**: Jackson for JSON serialization
-- **Testing**: JUnit 5 with comprehensive coverage
-- **Build System**: Maven for dependency management
-
-## 🚀 Features
-
-### **Complete Business Operations**
-| Operation | MCP Tool | Description |
-|-----------|----------|-------------|
-| **Create** | `create_business` | Add new business with validation |
-| **Read** | `list_businesses` | Retrieve all businesses |
-| **Read** | `get_business` | Get specific business details |
-| **Update** | `update_business` | Partial field updates |
-| **Delete** | `remove_business` | Remove business entities |
-| **Search** | `search_businesses` | Multi-field intelligent search |
-
-### **Advanced Capabilities**
-- **🔍 Intelligent Search**: Full-text search across name, category, and description
-- **📊 Rating System**: Business rating management (0.0-5.0 scale)
-- **🔒 Input Validation**: Schema-based validation with business rules
-- **⚡ Performance**: Optimized for sub-100ms response times
-- **🌐 Protocol Compliance**: Full MCP specification implementation
-
-## 💻 Quick Start
+## 🚀 Quick Start
 
 ### **Prerequisites**
-```bash
-Java 17+
-Maven 3.8+
-Git 2.30+
-```
+- Java 17 or higher
+- Maven 3.6 or higher
+- Claude Desktop (for AI assistant integration)
 
-### **Installation**
+### **Installation & Build**
 ```bash
 # Clone the repository
 git clone https://github.com/ravikalla/mcp-small-business-customer-care.git
 cd mcp-small-business-customer-care
 
 # Build the application
-mvn clean compile
+mvn clean package
 
-# Run comprehensive tests (54 test cases)
-mvn test
-
-# Start the MCP server
-mvn exec:java -Dexec.mainClass="com.ravikalla.McpServerLauncher"
+# Verify the JAR was created
+ls -la target/small-business-customer-care-1.0.0.jar
 ```
 
-### **Testing**
+### **Testing the Server**
 ```bash
-# Quick integration test (12 scenarios)
-./run-mcp-test.sh
+# Test initialization
+echo '{"jsonrpc":"2.0","method":"initialize","params":{"protocolVersion":"2024-11-05"},"id":0}' | java -jar target/small-business-customer-care-1.0.0.jar
 
-# Comprehensive test suite (35+ scenarios)
-./test-mcp.sh
+# Test listing tools
+echo '{"jsonrpc":"2.0","method":"tools/list","params":{},"id":1}' | java -jar target/small-business-customer-care-1.0.0.jar
+
+# Test business listing
+echo '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"list_businesses","arguments":{}},"id":2}' | java -jar target/small-business-customer-care-1.0.0.jar
 ```
 
-## 📊 API Examples
+## 🔧 Claude Desktop Integration
 
-### **Initialize MCP Connection**
+### **Configuration**
+Add this configuration to your Claude Desktop config file at:
+- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
 ```json
 {
-  "method": "initialize",
-  "params": {}
-}
-```
-
-### **Create Business Entity**
-```json
-{
-  "method": "tools/call",
-  "params": {
-    "name": "create_business",
-    "arguments": {
-      "name": "Digital Solutions LLC",
-      "category": "Technology",
-      "address": "456 Tech Park Ave",
-      "phone": "555-0198",
-      "email": "info@digitalsolutions.com",
-      "description": "Custom software development and digital transformation",
-      "rating": 4.7
+  "mcpServers": {
+    "small-business-customer-care": {
+      "command": "java",
+      "args": [
+        "-jar",
+        "/path/to/your/mcp-small-business-customer-care/target/small-business-customer-care-1.0.0.jar"
+      ],
+      "env": {}
     }
   }
 }
 ```
 
-### **Intelligent Search**
+**Important**: Replace `/path/to/your/` with the actual absolute path to your project directory.
+
+### **Restart Claude Desktop**
+After updating the configuration:
+1. Completely close Claude Desktop
+2. Reopen Claude Desktop
+3. The MCP server will automatically connect
+
+## 🛠️ Available Business Tools
+
+### **1. List All Businesses**
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "list_businesses",
+    "arguments": {}
+  }
+}
+```
+
+### **2. Search Businesses**
 ```json
 {
   "method": "tools/call",
   "params": {
     "name": "search_businesses",
     "arguments": {
-      "query": "technology consulting"
+      "query": "restaurant"
     }
   }
 }
 ```
 
-### **Update Business Information**
+### **3. Get Business Details**
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "get_business",
+    "arguments": {
+      "id": "1"
+    }
+  }
+}
+```
+
+### **4. Create New Business**
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "create_business",
+    "arguments": {
+      "name": "Ravi Restaurant",
+      "category": "Restaurant", 
+      "address": "789 Pine Rd, Springfield",
+      "phone": "555-0106",
+      "email": "info@ravirestaurant.com",
+      "description": "Family-friendly restaurant serving fresh cuisine. Hours: 9:00 AM - 5:00 PM daily",
+      "rating": 4.5
+    }
+  }
+}
+```
+
+### **5. Update Business**
 ```json
 {
   "method": "tools/call",
   "params": {
     "name": "update_business",
     "arguments": {
-      "id": "2",
-      "name": "Advanced Tech Solutions",
-      "rating": 4.9
+      "id": "5",
+      "description": "Full-service automotive repair and maintenance. Hours: 1:00 PM - 9:00 PM daily"
     }
   }
 }
 ```
 
-## 🧪 Quality Assurance
-
-### **Comprehensive Testing**
-| Test Type | Count | Coverage |
-|-----------|-------|----------|
-| Unit Tests | 19 | Core business logic |
-| Integration Tests | 35 | End-to-end scenarios |
-| **Total Tests** | **54** | **99% Coverage** |
-
-### **Test Categories**
-- **Protocol Compliance**: MCP specification adherence
-- **Business Logic**: Customer management operations
-- **Error Handling**: Edge cases and validation
-- **Performance**: Response time optimization
-
-### **Automated Testing**
-```bash
-# Run all tests
-mvn test                    # Unit tests
-./run-mcp-test.sh          # Integration tests
-./test-mcp.sh              # Comprehensive scenarios
+### **6. Remove Business**
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "remove_business",
+    "arguments": {
+      "id": "3"
+    }
+  }
+}
 ```
 
-## 🏢 Use Cases
+## 🎭 Real-World Usage Examples
 
-### **AI Assistant Integration**
-- **ChatGPT Integration**: Natural language business queries
-- **Claude Integration**: Intelligent customer insights
-- **Custom LLMs**: Domain-specific business processing
+Based on actual Claude Desktop conversations, here are examples of what you can do:
 
-### **Business Applications**
-1. **Customer Relationship Management**
-   - Centralized business directory
-   - AI-powered customer insights
-   - Automated relationship tracking
+### **Example 1: Business Hours Management**
+**User**: "Show me what businesses have timings"
 
-2. **Market Intelligence**
-   - Business categorization and analysis
-   - Competitive landscape mapping
-   - Industry trend identification
+**Claude Response**: Lists all businesses and notes that timing information is stored in descriptions.
 
-3. **Sales Operations**
-   - Lead qualification automation
-   - Territory management
-   - Performance analytics
+**User**: "Delete green thumb business. Create new business called Ravi Restaurant that opens at 9AM and closes at 5PM. Also, Mike's auto repair shop opens at 1PM and closes at 9PM."
 
-### **Integration Scenarios**
-- **CRM Platforms**: Salesforce, HubSpot data sync
-- **Business Intelligence**: Tableau, PowerBI integration
-- **Automation Tools**: Zapier, Microsoft Power Automate
-- **AI Platforms**: OpenAI API, Anthropic Claude
+**Claude Actions**:
+1. ✅ Deletes Green Thumb Landscaping
+2. ✅ Creates Ravi Restaurant with 9AM-5PM hours in description
+3. ✅ Updates Mike's Auto Repair with 1PM-9PM hours in description
 
-## 🛠️ Technical Implementation
+### **Example 2: Business Listing**
+**User**: "Show me the list of business names"
 
-### **Design Patterns**
-- **Strategy Pattern**: Pluggable tool handlers
-- **Factory Pattern**: Response object creation
-- **Repository Pattern**: Data access abstraction
+**Claude Response**:
+- Joe's Coffee Shop
+- Tech Repair Solutions  
+- Bella's Boutique
+- Mike's Auto Repair (Hours: 1:00 PM - 9:00 PM)
+- Ravi Restaurant (Hours: 9:00 AM - 5:00 PM)
 
-### **Performance Optimizations**
-- Stream processing for efficient data operations
-- Memory-optimized data structures
-- Stateless design for horizontal scaling
-- Optimized JSON processing pipeline
+*Total: 5 businesses*
 
-### **Security Features**
-- Input sanitization and validation
-- Schema-based request validation
-- Business rule enforcement
-- Error boundary protection
+### **Example 3: Smart Search**
+**User**: "Find all restaurants"
 
-## 🔄 Integration Roadmap
+**Claude**: Uses `search_businesses` with query "restaurant" to find restaurant-category businesses.
 
-### **Current Status**
-✅ Standalone MCP server with full functionality  
-✅ Comprehensive testing and documentation  
-✅ Production-ready codebase  
+## 🏗️ Technical Architecture
 
-### **Planned Integration**
-🔄 **Integration with [AI Small Business Customer Care](https://github.com/ravikalla/ai-small-business-customercare)**
-- Microservices deployment
-- Database integration
-- Authentication layer
-- API gateway integration
+### **Spring AI MCP Framework**
+- Uses `spring-ai-mcp-server-spring-boot-starter` for robust MCP protocol handling
+- Annotation-driven tool definitions with `@Tool`
+- Automatic tool discovery and registration via `ToolCallbacks.from()`
+- Clean STDIO transport with proper logging configuration
 
-### **Future Enhancements**
-- Real-time data synchronization
-- Advanced analytics dashboard
-- Machine learning integration
-- Multi-tenant architecture
+### **Business Service Layer**
+```java
+@Service
+public class BusinessService {
+    
+    @Tool(name = "list_businesses", description = "Get a list of all businesses")
+    public List<Business> listBusinesses() { ... }
+    
+    @Tool(name = "search_businesses", description = "Search businesses by name, category, or description")
+    public List<Business> searchBusinesses(String query) { ... }
+    
+    // ... other tool methods
+}
+```
 
-## 📈 Business Value
+### **Configuration**
+```properties
+spring.application.name=small-business-customer-care
+spring.main.web-application-type=none
+spring.ai.mcp.server.name=small-business-customer-care
+spring.ai.mcp.server.version=1.0.0
 
-### **Immediate Benefits**
-- **Reduced Manual Work**: Automated data entry and processing
-- **Enhanced Intelligence**: AI-driven customer insights
-- **Improved Integration**: Standard protocol for tool compatibility
-- **Cost Efficiency**: Open-source alternative to enterprise solutions
+# Required for STDIO transport
+spring.main.banner-mode=off
+logging.pattern.console=
+```
 
-### **Strategic Advantages**
-- **Future-Proof Architecture**: Compatible with emerging AI technologies
-- **Scalable Design**: Supports business growth and expansion
-- **Modular Structure**: Easy integration and customization
-- **Industry Standards**: MCP protocol ensures broad compatibility
+## 🧪 Development & Testing
+
+### **Running Tests**
+```bash
+# Run all tests
+mvn test
+
+# Run specific test
+mvn test -Dtest=SmallBusinessCustomerCareApplicationTest
+```
+
+### **Local Development**
+```bash
+# Start in development mode
+mvn spring-boot:run
+
+# Or run the JAR directly
+java -jar target/small-business-customer-care-1.0.0.jar
+```
+
+### **Debugging**
+The server logs to stderr (visible in Claude Desktop logs), while MCP communication happens via stdout/stdin.
+
+## 📋 Default Business Data
+
+The server comes pre-loaded with sample businesses:
+
+1. **Joe's Coffee Shop** (Restaurant) - 4.5⭐
+2. **Tech Repair Solutions** (Technology) - 4.2⭐  
+3. **Green Thumb Landscaping** (Services) - 4.8⭐
+4. **Bella's Boutique** (Retail) - 4.3⭐
+5. **Mike's Auto Repair** (Automotive) - 4.6⭐
+
+## 🚀 Production Deployment
+
+### **Building for Production**
+```bash
+mvn clean package -DskipTests
+```
+
+### **Running in Production**
+```bash
+java -jar target/small-business-customer-care-1.0.0.jar
+```
+
+### **System Requirements**
+- Java 17+ Runtime
+- Minimum 512MB RAM
+- Disk space for JAR file (~20MB)
+
+## 🔧 Troubleshooting
+
+### **Server Not Connecting**
+1. Verify Java 17+ is installed: `java -version`
+2. Check JAR file exists: `ls -la target/small-business-customer-care-1.0.0.jar`
+3. Test server manually with echo commands above
+4. Restart Claude Desktop completely
+5. Check Claude Desktop logs for errors
+
+### **Build Issues**
+```bash
+# Clean rebuild
+mvn clean compile
+
+# Skip tests if failing
+mvn clean package -DskipTests
+
+# Verbose output
+mvn clean package -X
+```
+
+### **Path Issues**
+- Use absolute paths in Claude Desktop configuration
+- Escape spaces in paths with quotes: `"/path with spaces/"`
+- Verify file permissions (JAR should be readable)
 
 ## 🤝 Contributing
 
-This component will be integrated into the main [AI Small Business Customer Care](https://github.com/ravikalla/ai-small-business-customercare) platform. For contributions to the broader ecosystem, please visit the main repository.
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new functionality
+5. Run `mvn test` to verify
+6. Submit a pull request
 
-## 📞 Project Links
+## 📚 Additional Resources
 
-**Main Project**: [AI Small Business Customer Care](https://github.com/ravikalla/ai-small-business-customercare)  
-**This Component**: [MCP Small Business Customer Care](https://github.com/ravikalla/mcp-small-business-customer-care)
+- [Model Context Protocol Specification](https://modelcontextprotocol.io/)
+- [Spring AI Documentation](https://spring.io/projects/spring-ai)
+- [Claude Desktop MCP Setup](https://claude.ai/docs)
+
+## 📄 License
+
+This project is open source and available under the MIT License.
 
 ---
 
-*Building the future of AI-integrated small business operations, one component at a time.*
+**Ready to use?** Follow the Claude Desktop integration steps above and start managing your business data with AI! 🚀
