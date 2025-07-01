@@ -81,8 +81,16 @@ public class McpServer {
                 }
             }
             
+            // If we reach here, stdin was closed. Add a small delay to prevent immediate exit
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
+            
         } catch (Exception e) {
-            // Silent error handling for clean MCP communication
+            // Add debug output to stderr to see what's happening
+            System.err.println("MCP Server error: " + e.getMessage());
         }
     }
     

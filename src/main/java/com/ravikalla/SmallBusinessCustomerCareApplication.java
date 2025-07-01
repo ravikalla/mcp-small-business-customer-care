@@ -2,31 +2,36 @@ package com.ravikalla;
 
 import com.ravikalla.mcp.McpServer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
-public class SmallBusinessCustomerCareApplication implements CommandLineRunner {
+public class SmallBusinessCustomerCareApplication implements ApplicationRunner {
     
     @Autowired
     private McpServer mcpServer;
     
     public static void main(String[] args) {
-        // Disable the shutdown hook so the app stays alive
-        SpringApplication app = new SpringApplication(SmallBusinessCustomerCareApplication.class);
-        app.setRegisterShutdownHook(false);
-        ConfigurableApplicationContext context = app.run(args);
-        
-        // Keep the application alive
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            context.close();
-        }));
+        System.setProperty("spring.main.keep-alive", "true");
+        SpringApplication.run(SmallBusinessCustomerCareApplication.class, args);
     }
     
     @Override
-    public void run(String... args) throws Exception {
-        mcpServer.start();
+    public void run(ApplicationArguments args) throws Exception {
+        // Start MCP server in a separate thread to prevent blocking Spring Boot
+        Thread mcpThread = new Thread(() -> {
+            mcpServer.start();
+        });
+        mcpThread.setDaemon(false); // Keep JVM alive
+        mcpThread.start();
+        
+        // Keep this thread alive to prevent Spring Boot from shutting down
+        try {
+            mcpThread.join();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }

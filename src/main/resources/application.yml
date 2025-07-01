@@ -4,6 +4,7 @@ spring:
   main:
     banner-mode: off
     web-application-type: none
+    keep-alive: true
     
 logging:
   pattern:
