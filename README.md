@@ -13,7 +13,7 @@ Here's what you can do with this MCP server through natural conversation with Cl
 
 | 👤 **User** | 🤖 **Claude (via MCP)** | 🔧 **What Happened** |
 |-------------|-------------------------|----------------------|
-| "Show me what businesses have timings" | Lists all 5 businesses and notes that timing info is stored in descriptions | Used `list_businesses` tool |
+| "Show me the list of businesses" | Lists all 5 businesses with their details and categories | Used `list_businesses` tool |
 | "Delete green thumb business" | ✅ "Deleted: Green Thumb Landscaping business" | Used `remove_business` with ID "3" |
 | "Create new business called Ravi Restaurant that opens at 9AM and closes at 5PM" | ✅ "Created: Ravi Restaurant<br/>• Category: Restaurant<br/>• Hours: 9:00 AM - 5:00 PM daily<br/>• Location: 789 Pine Rd, Springfield" | Used `create_business` with hours in description |
 | "Mike's auto repair shop opens at 1PM and closes at 9PM" | ✅ "Updated: Mike's Auto Repair<br/>• Hours: 1:00 PM - 9:00 PM daily<br/>• All other details preserved" | Used `update_business` to add hours |
@@ -21,6 +21,94 @@ Here's what you can do with this MCP server through natural conversation with Cl
 | "Find all restaurants" | Shows Ravi Restaurant and Joe's Coffee Shop with full details | Used `search_businesses` with query "restaurant" |
 
 **🎯 The Power**: Natural language → Structured business operations → Real data management
+
+## ⚡ Claude Desktop Setup
+
+### **Step 1: Download Claude Desktop**
+Download and install Claude Desktop from the official website:
+- **Official Download**: [https://claude.ai/download](https://claude.ai/download)
+- Available for **macOS**, **Windows**, and **Linux**
+
+![Claude Desktop Download](screenshots/claude-desktop-download.png)
+*Download Claude Desktop from the official website*
+
+### **Step 2: Build the MCP Server**
+```bash
+# Clone and build the project
+git clone https://github.com/ravikalla/mcp-small-business-customer-care.git
+cd mcp-small-business-customer-care
+mvn clean package
+
+# Verify JAR creation
+ls -la target/small-business-customer-care-1.0.0.jar
+```
+
+### **Step 3: Configure Claude Desktop**
+Open the Claude Desktop configuration file:
+
+**📍 Configuration File Locations:**
+- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+- **Linux**: `~/.config/Claude/claude_desktop_config.json`
+
+**💡 Tip**: On macOS, you can quickly open the config file:
+```bash
+open "~/Library/Application Support/Claude/claude_desktop_config.json"
+```
+
+**Add this configuration:**
+```json
+{
+  "mcpServers": {
+    "small-business-customer-care": {
+      "command": "java",
+      "args": [
+        "-jar",
+        "/absolute/path/to/your/mcp-small-business-customer-care/target/small-business-customer-care-1.0.0.jar"
+      ],
+      "env": {}
+    }
+  }
+}
+```
+
+![Claude Desktop Configuration](screenshots/claude-desktop-config-json.png)
+*Example configuration file with MCP server entry*
+
+**⚠️ Important Notes:**
+- Replace `/absolute/path/to/your/` with your actual project path
+- Use **absolute paths only** (e.g., `/Users/john/projects/mcp-small-business-customer-care/target/...`)
+- On Windows, use forward slashes: `C:/Users/john/projects/...`
+
+### **Step 4: Restart Claude Desktop**
+**Completely quit and reopen** Claude Desktop after updating the configuration:
+- **macOS**: Cmd+Q to quit, then reopen from Applications
+- **Windows**: Right-click system tray icon → Exit, then reopen
+- **Alternative**: Close all Claude Desktop windows and reopen the application
+
+![Claude Desktop Quit](screenshots/claude-desktop-quit-macos.png)
+*Use Cmd+Q to quit Claude Desktop on macOS*
+
+The MCP server should now be available.
+
+### **Step 5: Verify Connection**
+1. **Check Developer Settings**: Go to Claude Desktop Settings → Developer tab to see your MCP server running
+2. **Test the tools**: Try asking:
+   - *"Show me all businesses"*
+   - *"What business tools are available?"*
+
+![Claude Desktop MCP Server Running](screenshots/config-file-location-macos.png)
+*The MCP server running successfully in Claude Desktop's developer settings*
+
+You should see the business management tools working! 🎉
+
+![Business Conversation Example](screenshots/business-conversation-example.png)
+*Example conversation showing the MCP tools in action*
+
+**📚 Additional Resources:**
+- [Claude Desktop MCP Documentation](https://modelcontextprotocol.io/clients#claude-desktop)
+- [MCP Troubleshooting Guide](https://modelcontextprotocol.io/docs/troubleshooting)
+- [Spring AI MCP Documentation](https://docs.spring.io/spring-ai/reference/api/mcp.html)
 
 ## 🚀 Quick Start
 
