@@ -52,35 +52,19 @@ public class McpServer {
     }
     
     public void start() {
-        try {
-            // Create a persistent loop that doesn't depend on stdin staying open
-            PrintWriter writer = new PrintWriter(System.out, true);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+             PrintWriter writer = new PrintWriter(System.out, true)) {
             
-            // Keep the server alive by running indefinitely
-            while (true) {
+            String line;
+            // Keep reading until stdin is closed
+            while ((line = reader.readLine()) != null) {
                 try {
-                    // Check if input is available without blocking indefinitely
-                    if (reader.ready()) {
-                        String line = reader.readLine();
-                        
-                        if (line != null && !line.trim().isEmpty()) {
-                            JsonNode request = objectMapper.readTree(line);
-                            JsonNode response = handleRequest(request);
-                            writer.println(objectMapper.writeValueAsString(response));
-                            writer.flush();
-                        }
-                    } else {
-                        // No input ready, sleep briefly and continue
-                        Thread.sleep(50);
+                    if (!line.trim().isEmpty()) {
+                        JsonNode request = objectMapper.readTree(line);
+                        JsonNode response = handleRequest(request);
+                        writer.println(objectMapper.writeValueAsString(response));
+                        writer.flush();
                     }
-                    
-                } catch (IOException e) {
-                    // Input stream issue, but keep server alive
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    break;
                 } catch (Exception e) {
                     ObjectNode errorResponse = objectMapper.createObjectNode();
                     errorResponse.put("jsonrpc", "2.0");

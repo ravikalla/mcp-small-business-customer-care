@@ -1,16 +1,13 @@
-server:
-  port: 8080
-
 spring:
   application:
     name: small-business-customer-care
-  ai:
-    mcp:
-      server:
-        name: small-business-customer-care
-        version: 0.0.1
   main:
     banner-mode: off
-    logging:
-      pattern:
-        console: ""
+    web-application-type: none
+    
+logging:
+  pattern:
+    console: ""
+  level:
+    root: off
+    com.ravikalla: off
