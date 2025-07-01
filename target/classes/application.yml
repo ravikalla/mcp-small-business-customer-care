@@ -1,0 +1,11 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: small-business-customer-care
+
+logging:
+  level:
+    com.ravikalla: DEBUG
+    root: INFO
