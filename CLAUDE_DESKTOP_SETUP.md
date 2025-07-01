@@ -80,11 +80,14 @@ Your Claude Desktop config at `~/Library/Application Support/Claude/claude_deskt
 {
   "mcpServers": {
     "small-business-customer-care": {
-      "command": "java",
+      "command": "mvn",
       "args": [
-        "-jar",
-        "/Users/ravikalla/Desktop/projects/mcp-small-business-customer-care/target/small-business-customer-care-1.0.0.jar"
+        "-q",
+        "exec:java",
+        "-Dexec.mainClass=com.ravikalla.McpServerLauncher",
+        "-Dexec.args="
       ],
+      "cwd": "/Users/ravikalla/Desktop/projects/mcp-small-business-customer-care",
       "env": {}
     }
   }
@@ -95,9 +98,16 @@ Your Claude Desktop config at `~/Library/Application Support/Claude/claude_deskt
 
 ### Server Not Loading
 1. **Check Java**: Ensure Java 17+ is installed (`java -version`)
-2. **Verify JAR**: Confirm JAR exists at configured path
-3. **Restart Claude**: Close and reopen Claude Desktop completely
-4. **Check Logs**: Look for errors in Claude Desktop console
+2. **Check Maven**: Ensure Maven is installed (`mvn -version`)
+3. **Verify Project**: Confirm project exists at configured path
+4. **Restart Claude**: Close and reopen Claude Desktop completely
+5. **Check Logs**: Look for errors in Claude Desktop console
+
+### Clean STDIO Communication
+The server is configured with minimal logging to ensure clean MCP protocol communication:
+- Spring Boot logs are silenced via `logback-spring.xml`
+- Only essential MCP server logs are shown
+- JSON responses are clean without log interference
 
 ### Rebuilding the JAR
 If you make changes to the code:

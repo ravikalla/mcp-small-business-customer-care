@@ -5,16 +5,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ravikalla.model.Business;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class McpServer {
-    private static final Logger logger = LoggerFactory.getLogger(McpServer.class);
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final List<Business> businesses;
     private int nextBusinessId = 6;
@@ -50,44 +52,90 @@ public class McpServer {
     }
     
     public void start() {
-        logger.info("Starting MCP Server for Small Business Customer Care");
-        
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-             PrintWriter writer = new PrintWriter(System.out, true)) {
+        try {
+            // Create a persistent loop that doesn't depend on stdin staying open
+            PrintWriter writer = new PrintWriter(System.out, true);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             
-            String line;
-            while ((line = reader.readLine()) != null) {
+            // Keep the server alive by running indefinitely
+            while (true) {
                 try {
-                    JsonNode request = objectMapper.readTree(line);
-                    JsonNode response = handleRequest(request);
-                    writer.println(objectMapper.writeValueAsString(response));
+                    // Check if input is available without blocking indefinitely
+                    if (reader.ready()) {
+                        String line = reader.readLine();
+                        
+                        if (line != null && !line.trim().isEmpty()) {
+                            JsonNode request = objectMapper.readTree(line);
+                            JsonNode response = handleRequest(request);
+                            writer.println(objectMapper.writeValueAsString(response));
+                            writer.flush();
+                        }
+                    } else {
+                        // No input ready, sleep briefly and continue
+                        Thread.sleep(50);
+                    }
+                    
+                } catch (IOException e) {
+                    // Input stream issue, but keep server alive
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
                 } catch (Exception e) {
-                    logger.error("Error processing request: {}", e.getMessage());
                     ObjectNode errorResponse = objectMapper.createObjectNode();
-                    errorResponse.put("error", e.getMessage());
+                    errorResponse.put("jsonrpc", "2.0");
+                    ObjectNode error = objectMapper.createObjectNode();
+                    error.put("code", -32700);
+                    error.put("message", "Parse error: " + e.getMessage());
+                    errorResponse.set("error", error);
                     writer.println(objectMapper.writeValueAsString(errorResponse));
+                    writer.flush();
                 }
             }
-        } catch (IOException e) {
-            logger.error("IO error in MCP server: {}", e.getMessage());
+            
+        } catch (Exception e) {
+            // Silent error handling for clean MCP communication
         }
     }
     
     private JsonNode handleRequest(JsonNode request) {
         String method = request.has("method") ? request.get("method").asText() : "";
+        JsonNode id = request.has("id") ? request.get("id") : null;
         
-        switch (method) {
-            case "initialize":
-                return handleInitialize();
-            case "tools/list":
-                return handleToolsList();
-            case "tools/call":
-                return handleToolsCall(request);
-            default:
-                ObjectNode error = objectMapper.createObjectNode();
-                error.put("error", "Unknown method: " + method);
-                return error;
+        ObjectNode response = objectMapper.createObjectNode();
+        response.put("jsonrpc", "2.0");
+        if (id != null) {
+            response.set("id", id);
         }
+        
+        try {
+            JsonNode result;
+            switch (method) {
+                case "initialize":
+                    result = handleInitialize();
+                    break;
+                case "tools/list":
+                    result = handleToolsList();
+                    break;
+                case "tools/call":
+                    result = handleToolsCall(request);
+                    break;
+                default:
+                    ObjectNode error = objectMapper.createObjectNode();
+                    error.put("code", -32601);
+                    error.put("message", "Method not found: " + method);
+                    response.set("error", error);
+                    return response;
+            }
+            response.set("result", result);
+        } catch (Exception e) {
+            ObjectNode error = objectMapper.createObjectNode();
+            error.put("code", -32603);
+            error.put("message", "Internal error: " + e.getMessage());
+            response.set("error", error);
+        }
+        
+        return response;
     }
     
     private JsonNode handleInitialize() {

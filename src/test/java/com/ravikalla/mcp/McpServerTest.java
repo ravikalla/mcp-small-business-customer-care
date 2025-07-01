@@ -28,11 +28,12 @@ class McpServerTest {
         request.put("method", "initialize");
         
         JsonNode response = invokeHandleRequest(request);
+        JsonNode result = response.get("result");
         
-        assertEquals("2024-11-05", response.get("protocolVersion").asText());
-        assertTrue(response.get("capabilities").get("tools").asBoolean());
-        assertEquals("small-business-customer-care", response.get("serverInfo").get("name").asText());
-        assertEquals("1.0.0", response.get("serverInfo").get("version").asText());
+        assertEquals("2024-11-05", result.get("protocolVersion").asText());
+        assertTrue(result.get("capabilities").get("tools").asBoolean());
+        assertEquals("small-business-customer-care", result.get("serverInfo").get("name").asText());
+        assertEquals("1.0.0", result.get("serverInfo").get("version").asText());
     }
     
     @Test
@@ -42,9 +43,10 @@ class McpServerTest {
         request.put("method", "tools/list");
         
         JsonNode response = invokeHandleRequest(request);
+        JsonNode result = response.get("result");
         
-        assertTrue(response.has("tools"));
-        JsonNode tools = response.get("tools");
+        assertTrue(result.has("tools"));
+        JsonNode tools = result.get("tools");
         assertEquals(6, tools.size());
         
         String[] expectedTools = {"list_businesses", "search_businesses", "get_business", "create_business", "remove_business", "update_business"};
@@ -59,9 +61,10 @@ class McpServerTest {
         ObjectNode request = createToolCallRequest("list_businesses", objectMapper.createObjectNode());
         
         JsonNode response = invokeHandleRequest(request);
+        JsonNode result = response.get("result");
         
-        assertTrue(response.has("content"));
-        JsonNode content = response.get("content").get(0);
+        assertTrue(result.has("content"));
+        JsonNode content = result.get("content").get(0);
         assertEquals("text", content.get("type").asText());
         String text = content.get("text").asText();
         assertTrue(text.contains("Available Businesses:"));
@@ -80,9 +83,10 @@ class McpServerTest {
         ObjectNode request = createToolCallRequest("search_businesses", arguments);
         
         JsonNode response = invokeHandleRequest(request);
+        JsonNode result = response.get("result");
         
-        assertTrue(response.has("content"));
-        JsonNode content = response.get("content").get(0);
+        assertTrue(result.has("content"));
+        JsonNode content = result.get("content").get(0);
         assertEquals("text", content.get("type").asText());
         String text = content.get("text").asText();
         assertTrue(text.contains("Search Results for 'coffee'"));
@@ -98,9 +102,10 @@ class McpServerTest {
         ObjectNode request = createToolCallRequest("search_businesses", arguments);
         
         JsonNode response = invokeHandleRequest(request);
+        JsonNode result = response.get("result");
         
-        assertTrue(response.has("content"));
-        JsonNode content = response.get("content").get(0);
+        assertTrue(result.has("content"));
+        JsonNode content = result.get("content").get(0);
         assertEquals("text", content.get("type").asText());
         String text = content.get("text").asText();
         assertTrue(text.contains("No businesses found matching: nonexistent"));
@@ -114,9 +119,10 @@ class McpServerTest {
         ObjectNode request = createToolCallRequest("get_business", arguments);
         
         JsonNode response = invokeHandleRequest(request);
+        JsonNode result = response.get("result");
         
-        assertTrue(response.has("content"));
-        JsonNode content = response.get("content").get(0);
+        assertTrue(result.has("content"));
+        JsonNode content = result.get("content").get(0);
         assertEquals("text", content.get("type").asText());
         String text = content.get("text").asText();
         assertTrue(text.contains("Business Details:"));
@@ -135,9 +141,10 @@ class McpServerTest {
         ObjectNode request = createToolCallRequest("get_business", arguments);
         
         JsonNode response = invokeHandleRequest(request);
+        JsonNode result = response.get("result");
         
-        assertTrue(response.has("content"));
-        JsonNode content = response.get("content").get(0);
+        assertTrue(result.has("content"));
+        JsonNode content = result.get("content").get(0);
         assertEquals("text", content.get("type").asText());
         String text = content.get("text").asText();
         assertTrue(text.contains("Business not found with ID: 999"));
@@ -158,9 +165,10 @@ class McpServerTest {
         ObjectNode request = createToolCallRequest("create_business", arguments);
         
         JsonNode response = invokeHandleRequest(request);
+        JsonNode result = response.get("result");
         
-        assertTrue(response.has("content"));
-        JsonNode content = response.get("content").get(0);
+        assertTrue(result.has("content"));
+        JsonNode content = result.get("content").get(0);
         assertEquals("text", content.get("type").asText());
         String text = content.get("text").asText();
         assertTrue(text.contains("Business created successfully!"));
@@ -183,9 +191,10 @@ class McpServerTest {
         ObjectNode request = createToolCallRequest("create_business", arguments);
         
         JsonNode response = invokeHandleRequest(request);
+        JsonNode result = response.get("result");
         
-        assertTrue(response.has("content"));
-        JsonNode content = response.get("content").get(0);
+        assertTrue(result.has("content"));
+        JsonNode content = result.get("content").get(0);
         assertEquals("text", content.get("type").asText());
         String text = content.get("text").asText();
         assertTrue(text.contains("Business created successfully!"));
@@ -207,9 +216,10 @@ class McpServerTest {
         ObjectNode request = createToolCallRequest("create_business", arguments);
         
         JsonNode response = invokeHandleRequest(request);
+        JsonNode result = response.get("result");
         
-        assertTrue(response.has("content"));
-        JsonNode content = response.get("content").get(0);
+        assertTrue(result.has("content"));
+        JsonNode content = result.get("content").get(0);
         assertEquals("text", content.get("type").asText());
         String text = content.get("text").asText();
         assertTrue(text.contains("Business created successfully!"));
@@ -224,9 +234,10 @@ class McpServerTest {
         ObjectNode request = createToolCallRequest("remove_business", arguments);
         
         JsonNode response = invokeHandleRequest(request);
+        JsonNode result = response.get("result");
         
-        assertTrue(response.has("content"));
-        JsonNode content = response.get("content").get(0);
+        assertTrue(result.has("content"));
+        JsonNode content = result.get("content").get(0);
         assertEquals("text", content.get("type").asText());
         String text = content.get("text").asText();
         assertTrue(text.contains("Business removed successfully!"));
@@ -240,7 +251,7 @@ class McpServerTest {
         listRequest.set("params", listParams);
         
         JsonNode listResponse = invokeHandleRequest(listRequest);
-        String listText = listResponse.get("content").get(0).get("text").asText();
+        String listText = listResponse.get("result").get("content").get(0).get("text").asText();
         assertFalse(listText.contains("Joe's Coffee Shop"));
     }
     
@@ -252,9 +263,10 @@ class McpServerTest {
         ObjectNode request = createToolCallRequest("remove_business", arguments);
         
         JsonNode response = invokeHandleRequest(request);
+        JsonNode result = response.get("result");
         
-        assertTrue(response.has("content"));
-        JsonNode content = response.get("content").get(0);
+        assertTrue(result.has("content"));
+        JsonNode content = result.get("content").get(0);
         assertEquals("text", content.get("type").asText());
         String text = content.get("text").asText();
         assertTrue(text.contains("Business not found with ID: 999"));
@@ -269,7 +281,7 @@ class McpServerTest {
         JsonNode response = invokeHandleRequest(request);
         
         assertTrue(response.has("error"));
-        assertEquals("Unknown method: unknown_method", response.get("error").asText());
+        assertEquals("Method not found: unknown_method", response.get("error").get("message").asText());
     }
     
     @Test
@@ -278,9 +290,10 @@ class McpServerTest {
         ObjectNode request = createToolCallRequest("unknown_tool", objectMapper.createObjectNode());
         
         JsonNode response = invokeHandleRequest(request);
+        JsonNode result = response.get("result");
         
-        assertTrue(response.has("error"));
-        assertEquals("Unknown tool: unknown_tool", response.get("error").asText());
+        assertTrue(result.has("error"));
+        assertEquals("Unknown tool: unknown_tool", result.get("error").asText());
     }
     
     @Test
@@ -294,9 +307,10 @@ class McpServerTest {
         ObjectNode request = createToolCallRequest("update_business", arguments);
         
         JsonNode response = invokeHandleRequest(request);
+        JsonNode result = response.get("result");
         
-        assertTrue(response.has("content"));
-        JsonNode content = response.get("content").get(0);
+        assertTrue(result.has("content"));
+        JsonNode content = result.get("content").get(0);
         assertEquals("text", content.get("type").asText());
         String text = content.get("text").asText();
         assertTrue(text.contains("Business updated successfully!"));
@@ -315,9 +329,10 @@ class McpServerTest {
         ObjectNode request = createToolCallRequest("update_business", arguments);
         
         JsonNode response = invokeHandleRequest(request);
+        JsonNode result = response.get("result");
         
-        assertTrue(response.has("content"));
-        JsonNode content = response.get("content").get(0);
+        assertTrue(result.has("content"));
+        JsonNode content = result.get("content").get(0);
         assertEquals("text", content.get("type").asText());
         String text = content.get("text").asText();
         assertTrue(text.contains("Business updated successfully!"));
@@ -335,9 +350,10 @@ class McpServerTest {
         ObjectNode request = createToolCallRequest("update_business", arguments);
         
         JsonNode response = invokeHandleRequest(request);
+        JsonNode result = response.get("result");
         
-        assertTrue(response.has("content"));
-        JsonNode content = response.get("content").get(0);
+        assertTrue(result.has("content"));
+        JsonNode content = result.get("content").get(0);
         assertEquals("text", content.get("type").asText());
         String text = content.get("text").asText();
         assertTrue(text.contains("Business not found with ID: 999"));
@@ -353,9 +369,10 @@ class McpServerTest {
         ObjectNode request = createToolCallRequest("update_business", arguments);
         
         JsonNode response = invokeHandleRequest(request);
+        JsonNode result = response.get("result");
         
-        assertTrue(response.has("content"));
-        JsonNode content = response.get("content").get(0);
+        assertTrue(result.has("content"));
+        JsonNode content = result.get("content").get(0);
         assertEquals("text", content.get("type").asText());
         String text = content.get("text").asText();
         assertTrue(text.contains("Business updated successfully!"));
@@ -368,13 +385,13 @@ class McpServerTest {
         ObjectNode arguments1 = createBusinessArguments("Business 1");
         ObjectNode request1 = createToolCallRequest("create_business", arguments1);
         JsonNode response1 = invokeHandleRequest(request1);
-        String text1 = response1.get("content").get(0).get("text").asText();
+        String text1 = response1.get("result").get("content").get(0).get("text").asText();
         assertTrue(text1.contains("ID: 6"));
         
         ObjectNode arguments2 = createBusinessArguments("Business 2");
         ObjectNode request2 = createToolCallRequest("create_business", arguments2);
         JsonNode response2 = invokeHandleRequest(request2);
-        String text2 = response2.get("content").get(0).get("text").asText();
+        String text2 = response2.get("result").get("content").get(0).get("text").asText();
         assertTrue(text2.contains("ID: 7"));
     }
     

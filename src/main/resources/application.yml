@@ -4,8 +4,13 @@ server:
 spring:
   application:
     name: small-business-customer-care
-
-logging:
-  level:
-    com.ravikalla: DEBUG
-    root: INFO
+  ai:
+    mcp:
+      server:
+        name: small-business-customer-care
+        version: 0.0.1
+  main:
+    banner-mode: off
+    logging:
+      pattern:
+        console: ""
