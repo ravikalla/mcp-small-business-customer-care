@@ -91,6 +91,8 @@ open "~/Library/Application Support/Claude/claude_desktop_config.json"
 - **Windows**: Right-click system tray icon → Exit, then reopen
 - **Alternative**: Close all Claude Desktop windows and reopen the application
 
+*Use Cmd+Q to quit Claude Desktop on macOS*
+
 The MCP server should now be available.
 
 ### **Step 5: Verify Connection**
