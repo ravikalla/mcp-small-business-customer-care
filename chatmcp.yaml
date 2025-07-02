@@ -1,0 +1,143 @@
+name: small-business-customer-care
+version: "1.0.0"
+description: "MCP Server for Small Business Customer Care Management - Transform business operations through natural language with Claude Desktop"
+
+# Server metadata
+author: "Ravi Kalla"
+license: "MIT"
+homepage: "https://github.com/ravikalla/mcp-small-business-customer-care"
+repository: "https://github.com/ravikalla/mcp-small-business-customer-care"
+
+# Runtime configuration
+runtime: "java"
+main_class: "com.ravikalla.SmallBusinessCustomerCareApplication"
+
+# Server configuration
+server:
+  port: 8080
+  context_path: "/api"
+  
+# Environment variables
+environment:
+  SPRING_PROFILES_ACTIVE: "web"
+  JAVA_OPTS: "-Xmx512m -Xms256m"
+
+# Health check configuration  
+health_check:
+  endpoint: "/api/mcp/health"
+  interval: 30
+  timeout: 3
+  retries: 3
+
+# MCP Tools provided by this server
+tools:
+  - name: "list_businesses"
+    description: "Get a list of all businesses with their details"
+    endpoint: "/api/mcp/businesses"
+    method: "GET"
+    
+  - name: "search_businesses"
+    description: "Search businesses by name, category, or description"
+    endpoint: "/api/mcp/businesses/search"
+    method: "GET"
+    parameters:
+      - name: "query"
+        type: "string"
+        required: true
+        
+  - name: "get_business"
+    description: "Get detailed information about a specific business by ID"
+    endpoint: "/api/mcp/businesses/{id}"
+    method: "GET"
+    parameters:
+      - name: "id"
+        type: "string"
+        required: true
+        
+  - name: "create_business"
+    description: "Create a new business record with complete details"
+    endpoint: "/api/mcp/businesses"
+    method: "POST"
+    parameters:
+      - name: "name"
+        type: "string"
+        required: true
+      - name: "category"
+        type: "string"
+        required: true
+      - name: "address"
+        type: "string"
+        required: false
+      - name: "phone"
+        type: "string"
+        required: false
+      - name: "email"
+        type: "string"
+        required: false
+      - name: "description"
+        type: "string"
+        required: false
+      - name: "rating"
+        type: "number"
+        required: false
+        
+  - name: "update_business"
+    description: "Update an existing business record"
+    endpoint: "/api/mcp/businesses/{id}"
+    method: "PUT"
+    parameters:
+      - name: "id"
+        type: "string"
+        required: true
+      - name: "name"
+        type: "string"
+        required: false
+      - name: "category"
+        type: "string"
+        required: false
+      - name: "address"
+        type: "string"
+        required: false
+      - name: "phone"
+        type: "string"
+        required: false
+      - name: "email"
+        type: "string"
+        required: false
+      - name: "description"
+        type: "string"
+        required: false
+      - name: "rating"
+        type: "number"
+        required: false
+        
+  - name: "remove_business"
+    description: "Delete a business record by ID"
+    endpoint: "/api/mcp/businesses/{id}"
+    method: "DELETE"
+    parameters:
+      - name: "id"
+        type: "string"
+        required: true
+
+# Categories for discovery
+categories:
+  - "business"
+  - "productivity" 
+  - "data-management"
+
+# Keywords for search
+keywords:
+  - "business-management"
+  - "customer-care"
+  - "crud-operations"
+  - "spring-ai"
+  - "java"
+  - "natural-language"
+
+# Use cases
+use_cases:
+  - "Small business directory management"
+  - "Learning MCP server development"
+  - "Natural language data operations"
+  - "Customer care system prototyping"
