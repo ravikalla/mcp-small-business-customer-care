@@ -93,12 +93,13 @@ The MCP server should now be available.
 
 ### **Step 5: Verify Connection**
 1. **Check Developer Settings**: Go to Claude Desktop Settings → Developer tab to see your MCP server running
-2. **Test the tools**: Try asking:
-   - *"Show me all businesses"*
-   - *"What business tools are available?"*
 
 ![Claude Desktop MCP Server Running](screenshots/verify-if-mcpserver-installed-in-settings.png)
 *The MCP server running successfully in Claude Desktop's developer settings*
+
+2. **Test the tools**: Try asking:
+   - *"Show me all businesses"*
+   - *"What business tools are available?"*
 
 You should see the business management tools working! 🎉
 
