@@ -4,8 +4,11 @@
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.4-green.svg)](https://spring.io/projects/spring-boot)
 [![Spring AI](https://img.shields.io/badge/Spring%20AI-1.0.0--M6-blue.svg)](https://spring.io/projects/spring-ai)
 [![MCP Protocol](https://img.shields.io/badge/MCP-2024--11--05-purple.svg)](https://modelcontextprotocol.io/)
+[![MCP.so](https://img.shields.io/badge/MCP.so-Featured-brightgreen.svg)](https://mcp.so/server/small-business-customer-care)
 
 A **Spring AI-powered MCP (Model Context Protocol) server** for managing small business customer care operations through AI assistants like Claude Desktop.
+
+🌟 **[Featured on MCP.so](https://mcp.so/server/small-business-customer-care)** - Discover more MCP servers in the community!
 
 ## 💬 See It In Action
 
@@ -112,6 +115,7 @@ You should see the business management tools working! 🎉
 *Example conversation showing the MCP tools in action*
 
 **📚 Additional Resources:**
+- [MCP.so Community Platform](https://mcp.so/server/small-business-customer-care) - Our server listing
 - [Claude Desktop MCP Documentation](https://modelcontextprotocol.io/clients#claude-desktop)
 - [MCP Troubleshooting Guide](https://modelcontextprotocol.io/docs/troubleshooting)
 - [Spring AI MCP Documentation](https://docs.spring.io/spring-ai/reference/api/mcp.html)
@@ -275,6 +279,17 @@ mvn clean package -X          # Verbose output
 ## 📄 License
 
 This project is open source and available under the MIT License.
+
+## 🌐 Community
+
+This MCP server is part of the growing **[MCP.so community](https://mcp.so/server/small-business-customer-care)**! 
+
+- ⭐ **Star the project** if you find it useful
+- 🐛 **Report issues** on GitHub
+- 💡 **Suggest features** for future versions
+- 🤝 **Contribute** to make it even better
+
+**Discover more MCP servers**: Browse the [MCP.so directory](https://mcp.so) to find other amazing MCP servers for different use cases.
 
 ---
 
