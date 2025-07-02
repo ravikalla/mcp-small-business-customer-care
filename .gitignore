@@ -37,3 +37,8 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+*.bak
+*~
+
+# Build artifacts
+*.jar.original

@@ -13,18 +13,24 @@
     <version>1.0.0</version>
     <name>Small Business Customer Care</name>
     <description>MCP Server for Small Business Customer Care Management</description>
-    <url/>
+    <url>https://github.com/ravikalla/mcp-small-business-customer-care</url>
     <licenses>
-        <license/>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+        </license>
     </licenses>
     <developers>
-        <developer/>
+        <developer>
+            <id>ravikalla</id>
+            <name>Ravi Kalla</name>
+            <url>https://github.com/ravikalla</url>
+        </developer>
     </developers>
     <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
+        <connection>scm:git:git://github.com/ravikalla/mcp-small-business-customer-care.git</connection>
+        <developerConnection>scm:git:ssh://github.com:ravikalla/mcp-small-business-customer-care.git</developerConnection>
+        <url>https://github.com/ravikalla/mcp-small-business-customer-care/tree/main</url>
     </scm>
     <properties>
         <java.version>17</java.version>

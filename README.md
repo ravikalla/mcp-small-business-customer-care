@@ -29,7 +29,8 @@ Download and install Claude Desktop from the official website:
 - **Official Download**: [https://claude.ai/download](https://claude.ai/download)
 - Available for **macOS**, **Windows**, and **Linux**
 
-![Claude Desktop Download](screenshots/claude-desktop-download.png)
+<img src="screenshots/claude-desktop-download.png" alt="Claude Desktop Download" style="border: 1px solid #ddd; border-radius: 4px; padding: 5px;">
+
 *Download Claude Desktop from the official website*
 
 ### **Step 2: Build the MCP Server**
@@ -72,7 +73,8 @@ open "~/Library/Application Support/Claude/claude_desktop_config.json"
 }
 ```
 
-![Claude Desktop Configuration](screenshots/claude-desktop-config-json.png)
+<img src="screenshots/claude-desktop-config-json.png" alt="Claude Desktop Configuration" style="border: 1px solid #ddd; border-radius: 4px; padding: 5px;">
+
 *Example configuration file with MCP server entry*
 
 **⚠️ Important Notes:**
@@ -86,7 +88,8 @@ open "~/Library/Application Support/Claude/claude_desktop_config.json"
 - **Windows**: Right-click system tray icon → Exit, then reopen
 - **Alternative**: Close all Claude Desktop windows and reopen the application
 
-![Claude Desktop Quit](screenshots/claude-desktop-quit-macos.png)
+<img src="screenshots/claude-desktop-quit-macos.png" alt="Claude Desktop Quit" style="border: 1px solid #ddd; border-radius: 4px; padding: 5px;">
+
 *Use Cmd+Q to quit Claude Desktop on macOS*
 
 The MCP server should now be available.
@@ -94,7 +97,8 @@ The MCP server should now be available.
 ### **Step 5: Verify Connection**
 1. **Check Developer Settings**: Go to Claude Desktop Settings → Developer tab to see your MCP server running
 
-![Claude Desktop MCP Server Running](screenshots/verify-if-mcpserver-installed-in-settings.png)
+<img src="screenshots/verify-if-mcpserver-installed-in-settings.png" alt="Claude Desktop MCP Server Running" style="border: 1px solid #ddd; border-radius: 4px; padding: 5px;">
+
 *The MCP server running successfully in Claude Desktop's developer settings*
 
 2. **Test the tools**: Try asking:
@@ -103,7 +107,8 @@ The MCP server should now be available.
 
 You should see the business management tools working! 🎉
 
-![Business Conversation Example](screenshots/business-conversation-example.png)
+<img src="screenshots/business-conversation-example.png" alt="Business Conversation Example" style="border: 1px solid #ddd; border-radius: 4px; padding: 5px;">
+
 *Example conversation showing the MCP tools in action*
 
 **📚 Additional Resources:**

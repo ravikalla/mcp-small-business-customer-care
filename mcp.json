@@ -1,0 +1,71 @@
+{
+  "name": "small-business-customer-care",
+  "version": "1.0.0",
+  "description": "MCP Server for Small Business Customer Care Management - Manage business data through natural language with Claude Desktop",
+  "author": "Ravi Kalla",
+  "license": "MIT",
+  "homepage": "https://github.com/ravikalla/mcp-small-business-customer-care",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ravikalla/mcp-small-business-customer-care.git"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "business-management",
+    "claude-desktop",
+    "spring-ai",
+    "java",
+    "customer-care",
+    "crud-operations"
+  ],
+  "categories": [
+    "business",
+    "productivity",
+    "data-management"
+  ],
+  "runtime": "java",
+  "entry": {
+    "command": "java",
+    "args": ["-jar", "target/small-business-customer-care-1.0.0.jar"]
+  },
+  "tools": [
+    {
+      "name": "list_businesses",
+      "description": "Get a list of all businesses with their details"
+    },
+    {
+      "name": "search_businesses", 
+      "description": "Search businesses by name, category, or description"
+    },
+    {
+      "name": "get_business",
+      "description": "Get detailed information about a specific business by ID"
+    },
+    {
+      "name": "create_business",
+      "description": "Create a new business record with complete details"
+    },
+    {
+      "name": "update_business",
+      "description": "Update an existing business record"
+    },
+    {
+      "name": "remove_business",
+      "description": "Delete a business record by ID"
+    }
+  ],
+  "setup": {
+    "instructions": [
+      "Install Java 17 or higher",
+      "Clone the repository",
+      "Run 'mvn clean package' to build the JAR",
+      "Configure Claude Desktop with the JAR path",
+      "Restart Claude Desktop"
+    ],
+    "requirements": {
+      "java": ">=17",
+      "maven": ">=3.6"
+    }
+  }
+}
